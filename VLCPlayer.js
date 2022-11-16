@@ -1,12 +1,13 @@
-import React from "react";
-import ReactNative from "react-native";
+import React from 'react';
+import ReactNative from 'react-native';
 
 const { Component } = React;
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 const { StyleSheet, requireNativeComponent, NativeModules, View } = ReactNative;
-import resolveAssetSource from "react-native/Libraries/Image/resolveAssetSource";
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 
 export default class VLCPlayer extends Component {
   constructor(props, context) {
@@ -27,7 +28,7 @@ export default class VLCPlayer extends Component {
     this.changeVideoAspectRatio = this.changeVideoAspectRatio.bind(this);
   }
   static defaultProps = {
-    autoplay: true,
+    autoplay: true
   };
 
   setNativeProps(nativeProps) {
@@ -119,15 +120,13 @@ export default class VLCPlayer extends Component {
      } = this.props;*/
     const source = resolveAssetSource(this.props.source) || {};
 
-    let uri = source.uri || "";
+    let uri = source.uri || '';
     if (uri && uri.match(/^\//)) {
       uri = `file://${uri}`;
     }
 
     let isNetwork = !!(uri && uri.match(/^https?:/));
-    const isAsset = !!(
-      uri && uri.match(/^(assets-library|file|content|ms-appx|ms-appdata):/)
-    );
+    const isAsset = !!(uri && uri.match(/^(assets-library|file|content|ms-appx|ms-appdata):/));
     if (!isAsset) {
       isNetwork = true;
     }
@@ -138,7 +137,7 @@ export default class VLCPlayer extends Component {
     source.autoplay = this.props.autoplay;
     source.initOptions = source.initOptions || [];
     //repeat the input media
-    source.initOptions.push("--input-repeat=1000");
+    source.initOptions.push('--input-repeat=1000');
     const nativeProps = Object.assign({}, this.props);
     Object.assign(nativeProps, {
       style: [styles.base, nativeProps.style],
@@ -147,9 +146,9 @@ export default class VLCPlayer extends Component {
         uri,
         isNetwork,
         isAsset,
-        type: source.type || "",
+        type: source.type || '',
         mainVer: source.mainVer || 0,
-        patchVer: source.patchVer || 0,
+        patchVer: source.patchVer || 0
       },
       onVideoLoadStart: this._onLoadStart,
       onVideoOpen: this._onOpen,
@@ -161,7 +160,7 @@ export default class VLCPlayer extends Component {
       onVideoPaused: this._onPaused,
       onVideoStopped: this._onStopped,
       onVideoBuffering: this._onBuffering,
-      progressUpdateInterval: 250,
+      progressUpdateInterval: 250
     });
 
     return <RCTVLCPlayer ref={this._assignRoot} {...nativeProps} />;
@@ -214,12 +213,12 @@ VLCPlayer.propTypes = {
   translateX: PropTypes.number,
   translateY: PropTypes.number,
   rotation: PropTypes.number,
-  ...View.propTypes,
+  ...View.propTypes
 };
 
 const styles = StyleSheet.create({
   base: {
-    overflow: "hidden",
-  },
+    overflow: 'hidden'
+  }
 });
-const RCTVLCPlayer = requireNativeComponent("RCTVLCPlayer", VLCPlayer);
+const RCTVLCPlayer = requireNativeComponent('RCTVLCPlayer', VLCPlayer);
